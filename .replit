@@ -1,0 +1,4 @@
+run = """
+mix local.hex --if-missing --force
+iex -S mix
+"""
