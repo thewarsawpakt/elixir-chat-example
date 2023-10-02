@@ -8,7 +8,9 @@ defmodule Chat.Player do
   end
 
   def handle_info({sender, message}, state) do
-    Logger.info("#{inspect self()} got message #{message} from #{inspect sender}")
+    [{_, name}] = Registry.lookup(:player_lookup_table, sender)
+    [{_, my_name}] = Registry.lookup(:player_lookup_table, self()) # TODO: optimize this out
+    Logger.info("#{my_name} got message <#{message}> from #{name}")
     {:noreply, [message | state]}
   end
 
