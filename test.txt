@@ -1,0 +1,4 @@
+# Simple copy-and-paste elixir code to initialize the testing environment. Should probably move this to an actual test sometime.
+{:ok, first} = Chat.Supervisor.start_player(:one)
+Registry.register(:player_lookup_table, self(), :console)
+send(first, {self(), "hi"})
