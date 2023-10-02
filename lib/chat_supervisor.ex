@@ -15,12 +15,12 @@ defmodule Chat.Supervisor do
             start: {Chat.Player, :start_link, [id]}
         }
         {:ok, pid} = DynamicSupervisor.start_child(__MODULE__, child_specification)
-        case Registry.register(:player_lookup_table, id, pid) do
+        case Registry.register(:player_lookup_table, pid, id) do
             {:ok, _} ->
-                Logger.info("NEW_PLAYER SUCCESS #{inspect pid}")
+                Logger.info("created new player with pid #{inspect pid} and name #{id}")
                 {:ok, pid}
             {:error, _} ->
-                Logger.info("NEW_PLAYER FAILED")
+                Logger.info("failed to create new player")
                 :error
         end
     end
