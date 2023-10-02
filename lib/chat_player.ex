@@ -1,4 +1,5 @@
 defmodule Chat.Player do
+  require Logger
   use GenServer
 
   @spec init(List) :: {:ok, []}
@@ -6,16 +7,13 @@ defmodule Chat.Player do
     {:ok, state}
   end
 
-  def handle_call({sender, message}, _from, state) do
-    send(sender, {:response, :ack})
-    {:reply, :ok, [message | state]}
+  def handle_info({sender, message}, state) do
+    Logger.info("#{inspect self()} got message #{message} from #{inspect sender}")
+    {:noreply, [message | state]}
   end
 
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, [], name: __MODULE__)
-  end
-
-  def send_message(pid, message) do
-    GenServer.call(__MODULE__, {pid, message})
+  @spec start_link(atom()) :: :ignore | {:error, any} | {:ok, pid}
+  def start_link(name) do
+    GenServer.start_link(__MODULE__, [], name: name)
   end
 end
